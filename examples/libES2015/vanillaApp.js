@@ -4,8 +4,6 @@ const reaction = require('../../index'),
       ReactDOM = reaction.ReactDOM,
       React = reaction.React;
 
-const Component = React.Component;
-
 class VanillaApp {
   static run() {
     const rootDOMElement = document.getElementById('root');

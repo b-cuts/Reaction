@@ -8,8 +8,6 @@ var reaction = require('../../index'),
     ReactDOM = reaction.ReactDOM,
     React = reaction.React;
 
-var Component = React.Component;
-
 var VanillaApp = function () {
   function VanillaApp() {
     _classCallCheck(this, VanillaApp);
