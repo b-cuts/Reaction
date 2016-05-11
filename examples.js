@@ -2,137 +2,11 @@
 'use strict';
 
 module.exports = {
-  LikeOmNextApp: require('./lib/likeOmNextApp'),
   VanillaApp: require('./lib/vanillaApp'),
   ReduxApp: require('./lib/reduxApp')
 };
 
-},{"./lib/likeOmNextApp":2,"./lib/reduxApp":3,"./lib/vanillaApp":4}],2:[function(require,module,exports){
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var reaction = require('../../index'),
-    ReactDOM = reaction.ReactDOM,
-    React = reaction.React;
-
-var LikeOmNextApp = function () {
-  function LikeOmNextApp() {
-    _classCallCheck(this, LikeOmNextApp);
-  }
-
-  _createClass(LikeOmNextApp, null, [{
-    key: 'run',
-    value: function run() {
-      var rootDOMElement = document.getElementById('root');
-
-      var Component = React.Component;
-
-      var ClickMe = function (_Component) {
-        _inherits(ClickMe, _Component);
-
-        function ClickMe() {
-          _classCallCheck(this, ClickMe);
-
-          return _possibleConstructorReturn(this, Object.getPrototypeOf(ClickMe).apply(this, arguments));
-        }
-
-        _createClass(ClickMe, [{
-          key: 'render',
-          value: function render() {
-            var remount = this.context.remount;
-
-            return React.createElement(
-              'button',
-              { onClick: function onClick() {
-                  counter++;
-
-                  remount();
-                }
-              },
-              'Click me!'
-            );
-          }
-        }]);
-
-        return ClickMe;
-      }(Component);
-
-      var Counter = function (_Component2) {
-        _inherits(Counter, _Component2);
-
-        function Counter() {
-          _classCallCheck(this, Counter);
-
-          return _possibleConstructorReturn(this, Object.getPrototypeOf(Counter).apply(this, arguments));
-        }
-
-        _createClass(Counter, [{
-          key: 'render',
-          value: function render() {
-            return React.createElement(
-              'p',
-              null,
-              'Count:',
-              this.context.counter
-            );
-          }
-        }]);
-
-        return Counter;
-      }(Component);
-
-      var counter = 0;
-
-      var Provider = function (_Component3) {
-        _inherits(Provider, _Component3);
-
-        function Provider() {
-          _classCallCheck(this, Provider);
-
-          return _possibleConstructorReturn(this, Object.getPrototypeOf(Provider).apply(this, arguments));
-        }
-
-        _createClass(Provider, [{
-          key: 'getChildContext',
-          value: function getChildContext(context) {
-            var remount = this.remount.bind(this);
-
-            return {
-              counter: counter,
-              remount: remount
-            };
-          }
-        }, {
-          key: 'render',
-          value: function render() {
-            return this.props.children;
-          }
-        }]);
-
-        return Provider;
-      }(Component);
-
-      ReactDOM.render(React.createElement(
-        Provider,
-        null,
-        React.createElement(Counter, null),
-        React.createElement(ClickMe, null)
-      ), rootDOMElement);
-    }
-  }]);
-
-  return LikeOmNextApp;
-}();
-
-module.exports = LikeOmNextApp;
-},{"../../index":5}],3:[function(require,module,exports){
+},{"./lib/reduxApp":2,"./lib/vanillaApp":3}],2:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -501,7 +375,7 @@ var ReduxApp = function () {
 }();
 
 module.exports = ReduxApp;
-},{"../../index":5,"redux":24}],4:[function(require,module,exports){
+},{"../../index":4,"redux":23}],3:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -597,7 +471,7 @@ var VanillaApp = function () {
 }();
 
 module.exports = VanillaApp;
-},{"../../index":5}],5:[function(require,module,exports){
+},{"../../index":4}],4:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -605,7 +479,7 @@ module.exports = {
   ReactDOM: require('./lib/reactDOM')
 };
 
-},{"./lib/react":9,"./lib/reactDOM":14}],6:[function(require,module,exports){
+},{"./lib/react":8,"./lib/reactDOM":13}],5:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -697,7 +571,7 @@ function propNameIsHandlerName(propName) {
 function eventNameFromPropertyName(propName) {
   return propName.toLowerCase();
 }
-},{"./element":7}],7:[function(require,module,exports){
+},{"./element":6}],6:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -813,7 +687,7 @@ function referenceDOMElement(reference) {
 
   return referenceDOMElement;
 }
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 var helpers = {
@@ -849,7 +723,7 @@ function indexOf(element, array) {
 
   return index;
 }
-},{}],9:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -938,7 +812,7 @@ function childrenFromChildArguments(childArguments) {
 function first(array) {
   return array[0];
 }
-},{"./displayElement":6,"./element":7,"./reactClass":10,"./reactClassElement":11,"./reactComponent":12,"./reactComponentElement":13,"./reactFunctionElement":16,"./textElement":17}],10:[function(require,module,exports){
+},{"./displayElement":5,"./element":6,"./reactClass":9,"./reactClassElement":10,"./reactComponent":11,"./reactComponentElement":12,"./reactFunctionElement":15,"./textElement":16}],9:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1004,7 +878,7 @@ var ReactClass = function () {
 }();
 
 module.exports = ReactClass;
-},{}],11:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1062,7 +936,7 @@ var ReactClassElement = function (_ReactElement) {
 }(ReactElement);
 
 module.exports = ReactClassElement;
-},{"./reactElement":15}],12:[function(require,module,exports){
+},{"./reactElement":14}],11:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1101,7 +975,7 @@ var ReactComponent = function () {
 }();
 
 module.exports = ReactComponent;
-},{}],13:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1159,7 +1033,7 @@ var ReactComponentElement = function (_ReactElement) {
 }(ReactElement);
 
 module.exports = ReactComponentElement;
-},{"./reactElement":15}],14:[function(require,module,exports){
+},{"./reactElement":14}],13:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1188,7 +1062,7 @@ var ReactDOM = function () {
 }();
 
 module.exports = ReactDOM;
-},{"./element":7}],15:[function(require,module,exports){
+},{"./element":6}],14:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1244,7 +1118,7 @@ var ReactElement = function (_Element) {
     value: function remount() {
       var childParent = this,
           childReference = this.getChildReference(),
-          childContext = this.getChildContext();
+          childContext = this.getChildContext(this.context) || this.context;
 
       this.children.forEach(function (child) {
         child.unmount(childContext);
@@ -1334,7 +1208,7 @@ function findReference(parent, child) {
     return reference;
   }, null);
 }
-},{"./element":7,"./helpers":8}],16:[function(require,module,exports){
+},{"./element":6,"./helpers":7}],15:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1356,6 +1230,8 @@ var ReactFunctionElement = function (_ReactElement) {
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ReactFunctionElement).call(this, props));
 
     _this.reactFunction = reactFunction;
+
+    _this.state = _this.getInitialState();
     return _this;
   }
 
@@ -1363,6 +1239,15 @@ var ReactFunctionElement = function (_ReactElement) {
     key: 'render',
     value: function render() {
       return this.reactFunction(this.props, this.context);
+    }
+  }, {
+    key: 'getInitialState',
+    value: function getInitialState() {
+      if (this.reactFunction.getInitialState) {
+        return this.reactFunction.getInitialState(this.props, this.context);
+      } else {
+        return {};
+      }
     }
   }, {
     key: 'getChildContext',
@@ -1391,7 +1276,7 @@ var ReactFunctionElement = function (_ReactElement) {
 }(ReactElement);
 
 module.exports = ReactFunctionElement;
-},{"./reactElement":15}],17:[function(require,module,exports){
+},{"./reactElement":14}],16:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1437,7 +1322,7 @@ var TextElement = function (_Element) {
 }(Element);
 
 module.exports = TextElement;
-},{"./element":7}],18:[function(require,module,exports){
+},{"./element":6}],17:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -1530,7 +1415,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],19:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1589,7 +1474,7 @@ function applyMiddleware() {
     };
   };
 }
-},{"./compose":22}],20:[function(require,module,exports){
+},{"./compose":21}],19:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1641,7 +1526,7 @@ function bindActionCreators(actionCreators, dispatch) {
   }
   return boundActionCreators;
 }
-},{}],21:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -1771,7 +1656,7 @@ function combineReducers(reducers) {
   };
 }
 }).call(this,require('_process'))
-},{"./createStore":23,"./utils/warning":25,"_process":18,"lodash/isPlainObject":29}],22:[function(require,module,exports){
+},{"./createStore":22,"./utils/warning":24,"_process":17,"lodash/isPlainObject":28}],21:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -1805,7 +1690,7 @@ function compose() {
     }, last.apply(undefined, arguments));
   };
 }
-},{}],23:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2022,7 +1907,7 @@ function createStore(reducer, initialState, enhancer) {
     replaceReducer: replaceReducer
   };
 }
-},{"lodash/isPlainObject":29}],24:[function(require,module,exports){
+},{"lodash/isPlainObject":28}],23:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2071,7 +1956,7 @@ exports.bindActionCreators = _bindActionCreators2["default"];
 exports.applyMiddleware = _applyMiddleware2["default"];
 exports.compose = _compose2["default"];
 }).call(this,require('_process'))
-},{"./applyMiddleware":19,"./bindActionCreators":20,"./combineReducers":21,"./compose":22,"./createStore":23,"./utils/warning":25,"_process":18}],25:[function(require,module,exports){
+},{"./applyMiddleware":18,"./bindActionCreators":19,"./combineReducers":20,"./compose":21,"./createStore":22,"./utils/warning":24,"_process":17}],24:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2096,7 +1981,7 @@ function warning(message) {
   } catch (e) {}
   /* eslint-enable no-empty */
 }
-},{}],26:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeGetPrototype = Object.getPrototypeOf;
 
@@ -2113,7 +1998,7 @@ function getPrototype(value) {
 
 module.exports = getPrototype;
 
-},{}],27:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 /**
  * Checks if `value` is a host object in IE < 9.
  *
@@ -2135,7 +2020,7 @@ function isHostObject(value) {
 
 module.exports = isHostObject;
 
-},{}],28:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 /**
  * Checks if `value` is object-like. A value is object-like if it's not `null`
  * and has a `typeof` result of "object".
@@ -2166,7 +2051,7 @@ function isObjectLike(value) {
 
 module.exports = isObjectLike;
 
-},{}],29:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 var getPrototype = require('./_getPrototype'),
     isHostObject = require('./_isHostObject'),
     isObjectLike = require('./isObjectLike');
@@ -2238,5 +2123,5 @@ function isPlainObject(value) {
 
 module.exports = isPlainObject;
 
-},{"./_getPrototype":26,"./_isHostObject":27,"./isObjectLike":28}]},{},[1])(1)
+},{"./_getPrototype":25,"./_isHostObject":26,"./isObjectLike":27}]},{},[1])(1)
 });
