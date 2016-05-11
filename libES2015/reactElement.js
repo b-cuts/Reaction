@@ -33,6 +33,8 @@ class ReactElement extends Element {
   }
 
   remount() {
+    debugger
+
     const childParent = this,
           childReference = this.getChildReference(),
           childContext = this.context;
@@ -50,7 +52,7 @@ class ReactElement extends Element {
 
   unmount(context) {
     this.context = context;
-
+    
     this.componentWillUnmount();
 
     const childContext = this.getChildContext(context) || context;
