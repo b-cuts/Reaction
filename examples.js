@@ -1242,11 +1242,9 @@ var ReactElement = function (_Element) {
   }, {
     key: 'remount',
     value: function remount() {
-      debugger;
-
       var childParent = this,
           childReference = this.getChildReference(),
-          childContext = this.context;
+          childContext = this.getChildContext();
 
       this.children.forEach(function (child) {
         child.unmount(childContext);
