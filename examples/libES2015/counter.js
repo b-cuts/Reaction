@@ -3,13 +3,15 @@
 const reaction = require('../../index'),
       React = reaction.React;
 
-const StatefulComponent = require('./statefulComponent');
+const Component = React.Component;
 
-class Counter extends StatefulComponent {
-  constructor(state) {
-    super(state);
+class Counter extends Component {
+  getInitialState() {
+    debugger
+    
+    return 1;
   }
-  
+
   render() {
     debugger
 

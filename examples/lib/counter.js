@@ -11,18 +11,25 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var reaction = require('../../index'),
     React = reaction.React;
 
-var StatefulComponent = require('./statefulComponent');
+var Component = React.Component;
 
-var Counter = function (_StatefulComponent) {
-  _inherits(Counter, _StatefulComponent);
+var Counter = function (_Component) {
+  _inherits(Counter, _Component);
 
-  function Counter(state) {
+  function Counter() {
     _classCallCheck(this, Counter);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Counter).call(this, state));
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Counter).apply(this, arguments));
   }
 
   _createClass(Counter, [{
+    key: 'getInitialState',
+    value: function getInitialState() {
+      debugger;
+
+      return 1;
+    }
+  }, {
     key: 'render',
     value: function render() {
       debugger;
@@ -37,6 +44,6 @@ var Counter = function (_StatefulComponent) {
   }]);
 
   return Counter;
-}(StatefulComponent);
+}(Component);
 
 module.exports = Counter;
