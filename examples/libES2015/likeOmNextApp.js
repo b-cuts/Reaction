@@ -55,9 +55,8 @@ class LikeOmNextApp {
     }
 
     class Parser {
-      read(env, key, params) {
-        const state = env.state,
-              value = state[key],
+      read(state, key, params) {
+        const value = state[key],
               result = {
                 value: value
               };
@@ -65,9 +64,8 @@ class LikeOmNextApp {
         return result;
       }
 
-      mutate(env, key, transaction, params) {
-        const state = env.state,
-              value = state[key];
+      mutate(state, key, transaction, params) {
+        const value = state[key];
 
         state[key] = transaction(value);
       }
@@ -80,22 +78,19 @@ class LikeOmNextApp {
 
       getChildContext() {
         const state = this.state,
-              parser = this.props.parser,
-              env = {
-                state: state
-              };
+              parser = this.props.parser;
 
         function read(query) {
           const key = query.key;
 
-          return parser.read(env, key);
+          return parser.read(state, key);
         }
 
         function mutate(query) {
           const key = query.key,
                 transaction = query.transaction;
 
-          parser.mutate(env, key, transaction);
+          parser.mutate(state, key, transaction);
 
           this.forceUpdate();
         }

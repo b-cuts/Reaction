@@ -100,9 +100,8 @@ var LikeOmNextApp = function () {
 
         _createClass(Parser, [{
           key: 'read',
-          value: function read(env, key, params) {
-            var state = env.state,
-                value = state[key],
+          value: function read(state, key, params) {
+            var value = state[key],
                 result = {
               value: value
             };
@@ -111,9 +110,8 @@ var LikeOmNextApp = function () {
           }
         }, {
           key: 'mutate',
-          value: function mutate(env, key, transaction, params) {
-            var state = env.state,
-                value = state[key];
+          value: function mutate(state, key, transaction, params) {
+            var value = state[key];
 
             state[key] = transaction(value);
           }
@@ -140,22 +138,19 @@ var LikeOmNextApp = function () {
           key: 'getChildContext',
           value: function getChildContext() {
             var state = this.state,
-                parser = this.props.parser,
-                env = {
-              state: state
-            };
+                parser = this.props.parser;
 
             function read(query) {
               var key = query.key;
 
-              return parser.read(env, key);
+              return parser.read(state, key);
             }
 
             function mutate(query) {
               var key = query.key,
                   transaction = query.transaction;
 
-              parser.mutate(env, key, transaction);
+              parser.mutate(state, key, transaction);
 
               this.forceUpdate();
             }
