@@ -12,12 +12,13 @@ class LikeOmNextApp {
 
     class ClickMe extends Component {
       render() {
-        const remount = this.context.remount;
+        const parser = this.context.parser,
+              remount = this.context.remount;
 
         return (
 
-          <button onClick={function() {
-                    counter++;
+          <button onClick={() => {
+                    parser.mutate();
 
                     remount();
                   }}
@@ -30,33 +31,51 @@ class LikeOmNextApp {
 
     class Counter extends Component {
       render() {
+        const parser = this.context.parser;
+
         return (
 
           <p>
-            Count:{this.context.counter}
+            Count:{parser.read()}
           </p>
         )
       }
     }
 
-    var counter = 0;
+    class Parser {
+      constructor() {
+        this.counter = 0;
+      }
+
+      read() {
+        return this.counter;
+      }
+
+      mutate() {
+        this.counter++;
+      }
+    }
+
     class Provider extends Component {
-      getChildContext(context) {
-        const remount = this.remount.bind(this);
-        
-        return {
-          counter: counter,
-          remount: remount
-        };
+      getChildContext() {
+        const parser = this.props.parser,
+              remount = this.remount.bind(this),
+              context = {
+                parser: parser,
+                remount: remount
+              };
+
+        return context;
       }
       render() {
         return this.props.children;
       }
     }
 
+    const parser = new Parser();
     ReactDOM.render(
         
-      <Provider>
+      <Provider parser={parser}>
         <Counter />
         <ClickMe />
       </Provider>,

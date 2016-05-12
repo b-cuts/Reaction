@@ -36,12 +36,13 @@ var LikeOmNextApp = function () {
         _createClass(ClickMe, [{
           key: 'render',
           value: function render() {
-            var remount = this.context.remount;
+            var parser = this.context.parser,
+                remount = this.context.remount;
 
             return React.createElement(
               'button',
               { onClick: function onClick() {
-                  counter++;
+                  parser.mutate();
 
                   remount();
                 }
@@ -66,11 +67,13 @@ var LikeOmNextApp = function () {
         _createClass(Counter, [{
           key: 'render',
           value: function render() {
+            var parser = this.context.parser;
+
             return React.createElement(
               'p',
               null,
               'Count:',
-              this.context.counter
+              parser.read()
             );
           }
         }]);
@@ -78,7 +81,27 @@ var LikeOmNextApp = function () {
         return Counter;
       }(Component);
 
-      var counter = 0;
+      var Parser = function () {
+        function Parser() {
+          _classCallCheck(this, Parser);
+
+          this.counter = 0;
+        }
+
+        _createClass(Parser, [{
+          key: 'read',
+          value: function read() {
+            return this.counter;
+          }
+        }, {
+          key: 'mutate',
+          value: function mutate() {
+            this.counter++;
+          }
+        }]);
+
+        return Parser;
+      }();
 
       var Provider = function (_Component3) {
         _inherits(Provider, _Component3);
@@ -91,13 +114,15 @@ var LikeOmNextApp = function () {
 
         _createClass(Provider, [{
           key: 'getChildContext',
-          value: function getChildContext(context) {
-            var remount = this.remount.bind(this);
-
-            return {
-              counter: counter,
+          value: function getChildContext() {
+            var parser = this.props.parser,
+                remount = this.remount.bind(this),
+                context = {
+              parser: parser,
               remount: remount
             };
+
+            return context;
           }
         }, {
           key: 'render',
@@ -109,9 +134,10 @@ var LikeOmNextApp = function () {
         return Provider;
       }(Component);
 
+      var parser = new Parser();
       ReactDOM.render(React.createElement(
         Provider,
-        null,
+        { parser: parser },
         React.createElement(Counter, null),
         React.createElement(ClickMe, null)
       ), rootDOMElement);
