@@ -45,7 +45,8 @@ class LikeOmNextApp {
               queries = [query],
               results = reconciler.read(queries),
               result = first(results),
-              count = result[key];
+              value = result.value,
+              count = value;  ///
 
         return (
 
@@ -57,28 +58,21 @@ class LikeOmNextApp {
     }
 
     class Parser {
-      read(state, queries) {
-        const results = queries.map(function(query) {
-          const key = query.key;
+      read(env, key, params) {
+        const state = env.state,
+              value = state[key],
+              result = {
+                value: value
+              };
 
-          var result = {};
-
-          result[key] = state[key];
-
-          return result;
-        });
-
-        return results;
+        return result;
       }
 
-      mutate(state, queries) {
-        queries.forEach(function(query) {
-          const key = query.key,
-                transaction = query.transaction,
-                value = state[key];
+      mutate(env, key, transaction, params) {
+        const state = env.state,
+              value = state[key];
 
-          state[key] = transaction(value);
-        });
+        state[key] = transaction(value);
       }
     }
 
@@ -88,12 +82,27 @@ class LikeOmNextApp {
       }
 
       getChildContext() {
+        const state = this.state,
+              parser = this.props.parser,
+              env = {
+                state: state
+              };
+
         function read(queries) {
-          return this.props.parser.read(this.state, queries);
+          return queries.map(function(query) {
+            const key = query.key;
+
+            return parser.read(env, key);
+          });
         }
 
         function mutate(queries) {
-          this.props.parser.mutate(this.state, queries);
+          queries.forEach(function(query) {
+            const key = query.key,
+                  transaction = query.transaction;
+
+            parser.mutate(env, key, transaction);
+          });
 
           this.forceUpdate();
         }

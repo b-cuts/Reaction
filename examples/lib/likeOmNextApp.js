@@ -81,7 +81,8 @@ var LikeOmNextApp = function () {
                 queries = [query],
                 results = reconciler.read(queries),
                 result = first(results),
-                count = result[key];
+                value = result.value,
+                count = value; ///
 
             return React.createElement(
               'p',
@@ -102,29 +103,22 @@ var LikeOmNextApp = function () {
 
         _createClass(Parser, [{
           key: 'read',
-          value: function read(state, queries) {
-            var results = queries.map(function (query) {
-              var key = query.key;
+          value: function read(env, key, params) {
+            var state = env.state,
+                value = state[key],
+                result = {
+              value: value
+            };
 
-              var result = {};
-
-              result[key] = state[key];
-
-              return result;
-            });
-
-            return results;
+            return result;
           }
         }, {
           key: 'mutate',
-          value: function mutate(state, queries) {
-            queries.forEach(function (query) {
-              var key = query.key,
-                  transaction = query.transaction,
-                  value = state[key];
+          value: function mutate(env, key, transaction, params) {
+            var state = env.state,
+                value = state[key];
 
-              state[key] = transaction(value);
-            });
+            state[key] = transaction(value);
           }
         }]);
 
@@ -148,12 +142,27 @@ var LikeOmNextApp = function () {
         }, {
           key: 'getChildContext',
           value: function getChildContext() {
+            var state = this.state,
+                parser = this.props.parser,
+                env = {
+              state: state
+            };
+
             function read(queries) {
-              return this.props.parser.read(this.state, queries);
+              return queries.map(function (query) {
+                var key = query.key;
+
+                return parser.read(env, key);
+              });
             }
 
             function mutate(queries) {
-              this.props.parser.mutate(this.state, queries);
+              queries.forEach(function (query) {
+                var key = query.key,
+                    transaction = query.transaction;
+
+                parser.mutate(env, key, transaction);
+              });
 
               this.forceUpdate();
             }
