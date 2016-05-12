@@ -19,13 +19,12 @@ class LikeOmNextApp {
                 transaction: function(count) {
                   return count+1;
                 }
-              },
-              queries = [query];
+              };
 
         return (
 
           <button onClick={function() {
-                    reconciler.mutate(queries);
+                    reconciler.mutate(query);
                   }}
           >
             Click me!
@@ -42,9 +41,7 @@ class LikeOmNextApp {
               query = {
                 key: key
               },
-              queries = [query],
-              results = reconciler.read(queries),
-              result = first(results),
+              result = reconciler.read(query),
               value = result.value,
               count = value;  ///
 
@@ -88,21 +85,17 @@ class LikeOmNextApp {
                 state: state
               };
 
-        function read(queries) {
-          return queries.map(function(query) {
-            const key = query.key;
+        function read(query) {
+          const key = query.key;
 
-            return parser.read(env, key);
-          });
+          return parser.read(env, key);
         }
 
-        function mutate(queries) {
-          queries.forEach(function(query) {
-            const key = query.key,
-                  transaction = query.transaction;
+        function mutate(query) {
+          const key = query.key,
+                transaction = query.transaction;
 
-            parser.mutate(env, key, transaction);
-          });
+          parser.mutate(env, key, transaction);
 
           this.forceUpdate();
         }

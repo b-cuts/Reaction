@@ -43,13 +43,12 @@ var LikeOmNextApp = function () {
               transaction: function transaction(count) {
                 return count + 1;
               }
-            },
-                queries = [query];
+            };
 
             return React.createElement(
               'button',
               { onClick: function onClick() {
-                  reconciler.mutate(queries);
+                  reconciler.mutate(query);
                 }
               },
               'Click me!'
@@ -78,9 +77,7 @@ var LikeOmNextApp = function () {
                 query = {
               key: key
             },
-                queries = [query],
-                results = reconciler.read(queries),
-                result = first(results),
+                result = reconciler.read(query),
                 value = result.value,
                 count = value; ///
 
@@ -148,21 +145,17 @@ var LikeOmNextApp = function () {
               state: state
             };
 
-            function read(queries) {
-              return queries.map(function (query) {
-                var key = query.key;
+            function read(query) {
+              var key = query.key;
 
-                return parser.read(env, key);
-              });
+              return parser.read(env, key);
             }
 
-            function mutate(queries) {
-              queries.forEach(function (query) {
-                var key = query.key,
-                    transaction = query.transaction;
+            function mutate(query) {
+              var key = query.key,
+                  transaction = query.transaction;
 
-                parser.mutate(env, key, transaction);
-              });
+              parser.mutate(env, key, transaction);
 
               this.forceUpdate();
             }
