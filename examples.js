@@ -46,8 +46,7 @@ var LikeOmNextApp = function () {
         _createClass(ClickMe, [{
           key: 'render',
           value: function render() {
-            var parser = this.context.parser,
-                forceUpdate = this.context.forceUpdate;
+            var reconciler = this.context.reconciler;
 
             var query = {
               key: 'count',
@@ -60,9 +59,7 @@ var LikeOmNextApp = function () {
             return React.createElement(
               'button',
               { onClick: function onClick() {
-                  parser.mutate(queries);
-
-                  forceUpdate();
+                  reconciler.mutate(queries);
                 }
               },
               'Click me!'
@@ -85,14 +82,14 @@ var LikeOmNextApp = function () {
         _createClass(Counter, [{
           key: 'render',
           value: function render() {
-            var parser = this.context.parser;
+            var reconciler = this.context.reconciler;
 
             var key = 'count',
                 query = {
               key: key
             },
                 queries = [query],
-                results = parser.read(queries),
+                results = reconciler.read(queries),
                 result = first(results),
                 count = result[key];
 
@@ -111,63 +108,75 @@ var LikeOmNextApp = function () {
       var Parser = function () {
         function Parser() {
           _classCallCheck(this, Parser);
-
-          this.state = {
-            count: 0
-          };
         }
 
         _createClass(Parser, [{
           key: 'read',
-          value: function read(queries) {
+          value: function read(state, queries) {
             var results = queries.map(function (query) {
               var key = query.key;
 
               var result = {};
 
-              result[key] = this.state[key];
+              result[key] = state[key];
 
               return result;
-            }.bind(this));
+            });
 
             return results;
           }
         }, {
           key: 'mutate',
-          value: function mutate(queries) {
+          value: function mutate(state, queries) {
             queries.forEach(function (query) {
               var key = query.key,
                   transaction = query.transaction,
-                  value = this.state[key];
+                  value = state[key];
 
-              this.state[key] = transaction(value);
-            }.bind(this));
+              state[key] = transaction(value);
+            });
           }
         }]);
 
         return Parser;
       }();
 
-      var Provider = function (_Component3) {
-        _inherits(Provider, _Component3);
+      var Reconciler = function (_Component3) {
+        _inherits(Reconciler, _Component3);
 
-        function Provider() {
-          _classCallCheck(this, Provider);
+        function Reconciler() {
+          _classCallCheck(this, Reconciler);
 
-          return _possibleConstructorReturn(this, Object.getPrototypeOf(Provider).apply(this, arguments));
+          return _possibleConstructorReturn(this, Object.getPrototypeOf(Reconciler).apply(this, arguments));
         }
 
-        _createClass(Provider, [{
+        _createClass(Reconciler, [{
+          key: 'getInitialState',
+          value: function getInitialState() {
+            return this.props.state;
+          }
+        }, {
           key: 'getChildContext',
           value: function getChildContext() {
-            var parser = this.props.parser,
-                forceUpdate = this.forceUpdate.bind(this),
-                context = {
-              parser: parser,
-              forceUpdate: forceUpdate
+            function read(queries) {
+              return this.props.parser.read(this.state, queries);
+            }
+
+            function mutate(queries) {
+              this.props.parser.mutate(this.state, queries);
+
+              this.forceUpdate();
+            }
+
+            var reconciler = {
+              read: read.bind(this),
+              mutate: mutate.bind(this)
+            },
+                childContext = {
+              reconciler: reconciler
             };
 
-            return context;
+            return childContext;
           }
         }, {
           key: 'render',
@@ -176,13 +185,17 @@ var LikeOmNextApp = function () {
           }
         }]);
 
-        return Provider;
+        return Reconciler;
       }(Component);
 
-      var parser = new Parser();
+      var state = {
+        count: 0
+      },
+          parser = new Parser();
+
       ReactDOM.render(React.createElement(
-        Provider,
-        { parser: parser },
+        Reconciler,
+        { state: state, parser: parser },
         React.createElement(Counter, null),
         React.createElement(ClickMe, null)
       ), rootDOMElement);

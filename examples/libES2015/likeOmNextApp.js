@@ -12,8 +12,7 @@ class LikeOmNextApp {
 
     class ClickMe extends Component {
       render() {
-        const parser = this.context.parser,
-              forceUpdate = this.context.forceUpdate;
+        const reconciler = this.context.reconciler;
 
         const query = {
                 key: 'count',
@@ -26,9 +25,7 @@ class LikeOmNextApp {
         return (
 
           <button onClick={function() {
-                    parser.mutate(queries);
-
-                    forceUpdate();
+                    reconciler.mutate(queries);
                   }}
           >
             Click me!
@@ -39,14 +36,14 @@ class LikeOmNextApp {
 
     class Counter extends Component {
       render() {
-        const parser = this.context.parser;
+        const reconciler = this.context.reconciler;
 
         const key = 'count',
               query = {
                 key: key
               },
               queries = [query],
-              results = parser.read(queries),
+              results = reconciler.read(queries),
               result = first(results),
               count = result[key];
 
@@ -60,60 +57,74 @@ class LikeOmNextApp {
     }
 
     class Parser {
-      constructor() {
-        this.state = {
-          count: 0
-        };
-      }
-
-      read(queries) {
+      read(state, queries) {
         const results = queries.map(function(query) {
           const key = query.key;
 
           var result = {};
 
-          result[key] = this.state[key];
+          result[key] = state[key];
 
           return result;
-        }.bind(this));
+        });
 
         return results;
       }
 
-      mutate(queries) {
+      mutate(state, queries) {
         queries.forEach(function(query) {
           const key = query.key,
                 transaction = query.transaction,
-                value = this.state[key];
+                value = state[key];
 
-          this.state[key] = transaction(value);
-        }.bind(this));
+          state[key] = transaction(value);
+        });
       }
     }
 
-    class Provider extends Component {
+    class Reconciler extends Component {
+      getInitialState() {
+        return this.props.state;
+      }
+
       getChildContext() {
-        const parser = this.props.parser,
-              forceUpdate = this.forceUpdate.bind(this),
-              context = {
-                parser: parser,
-                forceUpdate: forceUpdate
+        function read(queries) {
+          return this.props.parser.read(this.state, queries);
+        }
+
+        function mutate(queries) {
+          this.props.parser.mutate(this.state, queries);
+
+          this.forceUpdate();
+        }
+
+        const reconciler = {
+                read: read.bind(this),
+                mutate: mutate.bind(this)
+              },
+              childContext = {
+                reconciler: reconciler
               };
 
-        return context;
+        return childContext;
       }
+
       render() {
         return this.props.children;
       }
     }
 
-    const parser = new Parser();
+    const state = {
+            count: 0
+          },
+          parser = new Parser();
+
     ReactDOM.render(
         
-      <Provider parser={parser}>
+      <Reconciler state={state} parser={parser}>
         <Counter />
         <ClickMe />
-      </Provider>,
+      </Reconciler>,
       rootDOMElement
     );
   }
