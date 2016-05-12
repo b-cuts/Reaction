@@ -47,14 +47,22 @@ var LikeOmNextApp = function () {
           key: 'render',
           value: function render() {
             var parser = this.context.parser,
-                remount = this.context.remount;
+                forceUpdate = this.context.forceUpdate;
+
+            var query = {
+              key: 'count',
+              transaction: function transaction(count) {
+                return count + 1;
+              }
+            },
+                queries = [query];
 
             return React.createElement(
               'button',
               { onClick: function onClick() {
-                  parser.mutate();
+                  parser.mutate(queries);
 
-                  remount();
+                  forceUpdate();
                 }
               },
               'Click me!'
@@ -79,11 +87,20 @@ var LikeOmNextApp = function () {
           value: function render() {
             var parser = this.context.parser;
 
+            var key = 'count',
+                query = {
+              key: key
+            },
+                queries = [query],
+                results = parser.read(queries),
+                result = first(results),
+                count = result[key];
+
             return React.createElement(
               'p',
               null,
               'Count:',
-              parser.read()
+              count
             );
           }
         }]);
@@ -95,18 +112,36 @@ var LikeOmNextApp = function () {
         function Parser() {
           _classCallCheck(this, Parser);
 
-          this.counter = 0;
+          this.state = {
+            count: 0
+          };
         }
 
         _createClass(Parser, [{
           key: 'read',
-          value: function read() {
-            return this.counter;
+          value: function read(queries) {
+            var results = queries.map(function (query) {
+              var key = query.key;
+
+              var result = {};
+
+              result[key] = this.state[key];
+
+              return result;
+            }.bind(this));
+
+            return results;
           }
         }, {
           key: 'mutate',
-          value: function mutate() {
-            this.counter++;
+          value: function mutate(queries) {
+            queries.forEach(function (query) {
+              var key = query.key,
+                  transaction = query.transaction,
+                  value = this.state[key];
+
+              this.state[key] = transaction(value);
+            }.bind(this));
           }
         }]);
 
@@ -126,10 +161,10 @@ var LikeOmNextApp = function () {
           key: 'getChildContext',
           value: function getChildContext() {
             var parser = this.props.parser,
-                remount = this.remount.bind(this),
+                forceUpdate = this.forceUpdate.bind(this),
                 context = {
               parser: parser,
-              remount: remount
+              forceUpdate: forceUpdate
             };
 
             return context;
@@ -158,6 +193,10 @@ var LikeOmNextApp = function () {
 }();
 
 module.exports = LikeOmNextApp;
+
+function first(array) {
+  return array[0];
+}
 },{"../../index":5}],3:[function(require,module,exports){
 'use strict';
 

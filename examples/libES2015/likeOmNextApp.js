@@ -13,14 +13,22 @@ class LikeOmNextApp {
     class ClickMe extends Component {
       render() {
         const parser = this.context.parser,
-              remount = this.context.remount;
+              forceUpdate = this.context.forceUpdate;
+
+        const query = {
+                key: 'count',
+                transaction: function(count) {
+                  return count+1;
+                }
+              },
+              queries = [query];
 
         return (
 
-          <button onClick={() => {
-                    parser.mutate();
+          <button onClick={function() {
+                    parser.mutate(queries);
 
-                    remount();
+                    forceUpdate();
                   }}
           >
             Click me!
@@ -33,10 +41,19 @@ class LikeOmNextApp {
       render() {
         const parser = this.context.parser;
 
+        const key = 'count',
+              query = {
+                key: key
+              },
+              queries = [query],
+              results = parser.read(queries),
+              result = first(results),
+              count = result[key];
+
         return (
 
           <p>
-            Count:{parser.read()}
+            Count:{count}
           </p>
         )
       }
@@ -44,25 +61,43 @@ class LikeOmNextApp {
 
     class Parser {
       constructor() {
-        this.counter = 0;
+        this.state = {
+          count: 0
+        };
       }
 
-      read() {
-        return this.counter;
+      read(queries) {
+        const results = queries.map(function(query) {
+          const key = query.key;
+
+          var result = {};
+
+          result[key] = this.state[key];
+
+          return result;
+        }.bind(this));
+
+        return results;
       }
 
-      mutate() {
-        this.counter++;
+      mutate(queries) {
+        queries.forEach(function(query) {
+          const key = query.key,
+                transaction = query.transaction,
+                value = this.state[key];
+
+          this.state[key] = transaction(value);
+        }.bind(this));
       }
     }
 
     class Provider extends Component {
       getChildContext() {
         const parser = this.props.parser,
-              remount = this.remount.bind(this),
+              forceUpdate = this.forceUpdate.bind(this),
               context = {
                 parser: parser,
-                remount: remount
+                forceUpdate: forceUpdate
               };
 
         return context;
@@ -85,3 +120,5 @@ class LikeOmNextApp {
 }
 
 module.exports = LikeOmNextApp;
+
+function first(array) { return array[0]; }
