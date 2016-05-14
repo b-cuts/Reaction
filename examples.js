@@ -34,73 +34,132 @@ var LikeOmNextApp = function () {
 
       var Component = React.Component;
 
-      var ClickMe = function (_Component) {
-        _inherits(ClickMe, _Component);
+      // class ClickMe extends Component {
+      //   render() {
+      //     const reconciler = this.context.reconciler;
+      //
+      //     const query = {
+      //             key: 'count',
+      //             transaction: function(count) {
+      //               return count+1;
+      //             }
+      //           };
+      //
+      //     return (
+      //
+      //       <button onClick={function() {
+      //                 reconciler.mutate(query);
+      //               }}
+      //       >
+      //         Click me!
+      //       </button>
+      //     )
+      //   }
+      // }
 
-        function ClickMe() {
-          _classCallCheck(this, ClickMe);
+      // class Counter extends Component {
+      //   render() {
+      //     const reconciler = this.context.reconciler;
+      //
+      //     const key = 'count',
+      //           query = {
+      //             key: key
+      //           },
+      //           result = reconciler.read(query),
+      //           value = result.value,
+      //           count = value;  ///
+      //
+      //     return (
+      //
+      //       <p>
+      //         Count:{count}
+      //       </p>
+      //     )
+      //   }
+      // }
 
-          return _possibleConstructorReturn(this, Object.getPrototypeOf(ClickMe).apply(this, arguments));
+      var Person = function Person(_ref) {
+        var name = _ref.name;
+        var points = _ref.points;
+
+
+        return React.createElement(
+          'li',
+          null,
+          'name: ',
+          React.createElement(
+            'strong',
+            null,
+            name
+          ),
+          React.createElement('br', null),
+          'points: ',
+          React.createElement(
+            'strong',
+            null,
+            points
+          )
+        );
+      };
+
+      var ListOne = function (_Component) {
+        _inherits(ListOne, _Component);
+
+        function ListOne() {
+          _classCallCheck(this, ListOne);
+
+          return _possibleConstructorReturn(this, Object.getPrototypeOf(ListOne).apply(this, arguments));
         }
 
-        _createClass(ClickMe, [{
+        _createClass(ListOne, [{
           key: 'render',
           value: function render() {
             var reconciler = this.context.reconciler;
 
-            var query = {
-              key: 'count',
-              transaction: function transaction(count) {
-                return count + 1;
-              }
-            };
-
-            return React.createElement(
-              'button',
-              { onClick: function onClick() {
-                  reconciler.mutate(query);
-                }
-              },
-              'Click me!'
-            );
-          }
-        }]);
-
-        return ClickMe;
-      }(Component);
-
-      var Counter = function (_Component2) {
-        _inherits(Counter, _Component2);
-
-        function Counter() {
-          _classCallCheck(this, Counter);
-
-          return _possibleConstructorReturn(this, Object.getPrototypeOf(Counter).apply(this, arguments));
-        }
-
-        _createClass(Counter, [{
-          key: 'render',
-          value: function render() {
-            var reconciler = this.context.reconciler;
-
-            var key = 'count',
+            var key = 'listOne',
                 query = {
               key: key
             },
                 result = reconciler.read(query),
                 value = result.value,
-                count = value; ///
+                items = value; ///
+
+            var persons = items.map(function (item) {
+              var name = item.name,
+                  points = item.points;
+
+              return React.createElement(Person, { name: name, points: points });
+            });
 
             return React.createElement(
-              'p',
+              'ul',
               null,
-              'Count:',
-              count
+              persons
             );
           }
         }]);
 
-        return Counter;
+        return ListOne;
+      }(Component);
+
+      var ListTwo = function (_Component2) {
+        _inherits(ListTwo, _Component2);
+
+        function ListTwo() {
+          _classCallCheck(this, ListTwo);
+
+          return _possibleConstructorReturn(this, Object.getPrototypeOf(ListTwo).apply(this, arguments));
+        }
+
+        _createClass(ListTwo, [{
+          key: 'render',
+          value: function render() {
+
+            return React.createElement('ul', null);
+          }
+        }]);
+
+        return ListTwo;
       }(Component);
 
       var Parser = function () {
@@ -186,15 +245,16 @@ var LikeOmNextApp = function () {
       }(Component);
 
       var state = {
-        count: 0
+        listOne: [{ name: 'John', points: 0 }, { name: 'Mary', points: 0 }, { name: 'Bob', points: 0 }],
+        listTwo: [{ name: 'Mary', points: 0, age: 27 }, { name: 'Gwen', points: 0 }, { name: 'Jeff', points: 0 }]
       },
           parser = new Parser();
 
       ReactDOM.render(React.createElement(
         Reconciler,
         { state: state, parser: parser },
-        React.createElement(Counter, null),
-        React.createElement(ClickMe, null)
+        React.createElement(ListOne, null),
+        React.createElement(ListTwo, null)
       ), rootDOMElement);
     }
   }]);
@@ -203,10 +263,6 @@ var LikeOmNextApp = function () {
 }();
 
 module.exports = LikeOmNextApp;
-
-function first(array) {
-  return array[0];
-}
 },{"../../index":5}],3:[function(require,module,exports){
 'use strict';
 

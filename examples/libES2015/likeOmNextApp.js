@@ -10,47 +10,102 @@ class LikeOmNextApp {
 
     const { Component } = React;
 
-    class ClickMe extends Component {
+    // class ClickMe extends Component {
+    //   render() {
+    //     const reconciler = this.context.reconciler;
+    //
+    //     const query = {
+    //             key: 'count',
+    //             transaction: function(count) {
+    //               return count+1;
+    //             }
+    //           };
+    //
+    //     return (
+    //
+    //       <button onClick={function() {
+    //                 reconciler.mutate(query);
+    //               }}
+    //       >
+    //         Click me!
+    //       </button>
+    //     )
+    //   }
+    // }
+
+    // class Counter extends Component {
+    //   render() {
+    //     const reconciler = this.context.reconciler;
+    //
+    //     const key = 'count',
+    //           query = {
+    //             key: key
+    //           },
+    //           result = reconciler.read(query),
+    //           value = result.value,
+    //           count = value;  ///
+    //
+    //     return (
+    //
+    //       <p>
+    //         Count:{count}
+    //       </p>
+    //     )
+    //   }
+    // }
+
+    const Person = ({name, points}) => {
+
+      return (
+
+        <li>
+          name: <strong>{name}</strong>
+          <br/>
+          points: <strong>{points}</strong>
+        </li>
+      );
+    };
+
+    class ListOne extends Component {
       render() {
         const reconciler = this.context.reconciler;
 
-        const query = {
-                key: 'count',
-                transaction: function(count) {
-                  return count+1;
-                }
-              };
-
-        return (
-
-          <button onClick={function() {
-                    reconciler.mutate(query);
-                  }}
-          >
-            Click me!
-          </button>
-        )
-      }
-    }
-
-    class Counter extends Component {
-      render() {
-        const reconciler = this.context.reconciler;
-
-        const key = 'count',
+        const key = 'listOne',
               query = {
                 key: key
               },
               result = reconciler.read(query),
               value = result.value,
-              count = value;  ///
+              items = value;  ///
+
+        var persons = items.map(function(item) {
+          const name = item.name,
+                points = item.points;
+
+          return (
+
+            <Person name={name} points={points} />
+          );
+        });
 
         return (
 
-          <p>
-            Count:{count}
-          </p>
-        )
+          <ul>
+            {persons}
+          </ul>
+        );
+      }
+    }
+
+    class ListTwo extends Component {
+      render() {
+
+        return (
+
+          <ul>
+
+          </ul>
+        );
       }
     }
 
@@ -112,15 +167,24 @@ class LikeOmNextApp {
     }
 
     const state = {
-            count: 0
+            listOne: [
+              {name: 'John', points: 0},
+              {name: 'Mary', points: 0},
+              {name: 'Bob', points: 0}
+            ],
+            listTwo: [
+              {name: 'Mary', points: 0, age: 27},
+              {name: 'Gwen', points: 0},
+              {name: 'Jeff', points: 0}
+            ]
           },
           parser = new Parser();
 
     ReactDOM.render(
         
       <Reconciler state={state} parser={parser}>
-        <Counter />
-        <ClickMe />
+        <ListOne />
+        <ListTwo />
       </Reconciler>,
       rootDOMElement
     );
@@ -128,5 +192,3 @@ class LikeOmNextApp {
 }
 
 module.exports = LikeOmNextApp;
-
-function first(array) { return array[0]; }
